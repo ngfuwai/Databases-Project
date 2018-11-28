@@ -113,19 +113,19 @@
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+    <input class="form-control" type="text" value="" id="example-text-input">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+    <input class="form-control" type="text" value="" id="example-text-input">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">User Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+    <input class="form-control" type="text" value="" id="example-text-input">
   </div>
 </div>
 <input type="submit" name="create" value="Create">
@@ -136,19 +136,19 @@
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Song Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+    <input class="form-control" type="text" value="" id="example-text-input">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+    <input class="form-control" type="text" value="" id="example-text-input">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Song Playlist Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+    <input class="form-control" type="text" value="" id="example-text-input">
   </div>
 </div>
 <input type="submit" name="add" value="Add">
