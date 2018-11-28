@@ -100,7 +100,14 @@
 		</form>
       
     </div><!-- /.navbar-collapse -->
+    <br><br>
+
+    <a type="button" class="btn btn-success" name="add-song" href="songManip.php?add=true">Add Song</a>
+    <a type="button" class="btn btn-success" name="delete-song" href="songManip.php?delete=true">Delete Song</a>
+    <a type="button" class="btn btn-success" name="add-song" href="songManip.php?edit=true">Edit Song</a>
   </div><!-- /.container-fluid -->
+
+
 </nav>
 
 	
