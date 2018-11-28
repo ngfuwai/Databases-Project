@@ -12,7 +12,7 @@ function invalid($entry){
 
 function signUp($username, $password){
   echo("User does not exist, would you like to create an account with credentials entered?<br>");
-  echo("<a href='signup.php'>Yes!</a><br>");
+  echo("<a href='signup.php?username=' . $username . '&password=' . $password>Yes!</a><br>");
   echo("<a href='index.php'>No</a>");
 }
 
@@ -24,14 +24,15 @@ if(isset($_POST['username']) && isset($_POST['password'])){
   }else if(!ctype_alnum($password)){
     invalid("Password"); //same as previous comment 
   }else{
-    $response = callApi("localhost:8000/api/users/signin", "POST", "{user_id: '', username: $username, password: $password}" );
+    $response = callApi("localhost:8000/api/users/signin", "POST", array("username" => $username, "password" => $password);
     //Run validations for a correct username/password
-    if ($reponse.user.user_id == '0') {
+    if ($reponse.user_id == '') {
       signUp($username, $password);
     } else {
+      $_SESSION['user_id'] = $response.user_id;
       $_SESSION['username'] = $username;
       $_SESSION['password'] = $password;
-      //valid passthrough
+
       header("Location: header.php");
       exit();
     }
