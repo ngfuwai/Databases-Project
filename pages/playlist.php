@@ -1,6 +1,14 @@
 <?php 
 
+include("callApi.php");
 
+if(isset($_POST['create'])){
+	$playlist_id = $_POST['playlist_id'];
+	$playlist_name = $_POST['playlist_name'];
+	$user_id = $_POST['user_id'];
+
+	callApi($_POST, "/api/playlist/" . '$playlist_id' ., array("playlist_id"=>'$playlist_id', "playlist_name"=>'$playlist_name', "user_id"=>'$user_id'));
+}
 
 
 
@@ -109,46 +117,46 @@
 </div>
 
 <h5>Create A Playlist</h5>
-<form>
+<form method="post">
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="" id="example-text-input">
+    <input class="form-control" type="text" value="Artisanal kale" name="playlist_id" id="example-text-input">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="" id="example-text-input">
+    <input class="form-control" type="text" value="Artisanal kale" name="playlist_name" id="example-text-input">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">User Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="" id="example-text-input">
+    <input class="form-control" type="text" value="Artisanal kale" name="user_id" id="example-text-input">
   </div>
 </div>
 <input type="submit" name="create" value="Create">
 </form>
 
 <h5>Add Songs to Playlist</h5>
-<form>
+<form method="post">
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Song Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="" id="example-text-input">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="" id="example-text-input">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Song Playlist Id</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="" id="example-text-input">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
   </div>
 </div>
 <input type="submit" name="add" value="Add">
@@ -168,6 +176,4 @@
 
 </body>
 </html>
-
-
 
