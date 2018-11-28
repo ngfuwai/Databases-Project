@@ -20,6 +20,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
   }else if(!ctype_alnum($password)){
     invalid("Password"); //same as previous comment 
   }else{
+    
     //Run validations for a correct username/password
     $_SESSION['username'] = $username;
     $_SESSION['password'] = $password;
@@ -30,4 +31,5 @@ if(isset($_POST['username']) && isset($_POST['password'])){
 }else{
   invalid("empty");
 }
+
 ?>
