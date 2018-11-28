@@ -1,15 +1,6 @@
 <?php 
 
-$con = mysqli_connect("localhost", "root", "", "Music");
 
-	if(mysqli_connect_errno()) {
-		echo "Failed to connect: " . mysqli_connect_errno();
-	}
-
-if(isset($_SESSION['userLoggedIn'])) {
-  $username = $_SESSION['userLoggedIn'];
-
-}
 
 
 
@@ -79,22 +70,96 @@ if(isset($_SESSION['userLoggedIn'])) {
 
 <div style="text-align: center;">
 	
-	<form method="post">
-	<input type="submit" name="myPlaylist" value="My Playlist">
-	<input type="submit" name="createPlaylist" value="Create Playlist">	
-	</form>
+	<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Song Name</th>
+      <th scope="col">Artist</th>
+      <th scope="col">Duration</th>
+    </tr>
+  </thead>
 
+  <?php 
+
+
+   ?>
+
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
 </div>
+
+<h5>Create A Playlist</h5>
+<form>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">User Id</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+  </div>
+</div>
+<input type="submit" name="create" value="Create">
+</form>
+
+<h5>Add Songs to Playlist</h5>
+<form>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Song Id</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Song Playlist Id</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+  </div>
+</div>
+<input type="submit" name="add" value="Add">
+</form>
+
+
+
 
 	<div>
 
-		<?php
-
-			if(isset($_POST['myPlaylist'])){
-				
-			}
-
-		 ?>
+		
 
 	</div>
 	
@@ -103,4 +168,6 @@ if(isset($_SESSION['userLoggedIn'])) {
 
 </body>
 </html>
+
+
 
