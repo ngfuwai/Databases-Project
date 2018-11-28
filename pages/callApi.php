@@ -1,7 +1,8 @@
 <?php
-function CallAPI($method, $url, $data = false)
+function CallAPI($method, $addedURL, $data = false)
 {
-
+  $baseURL = "http://172.25.99.162:8000/";
+  $url = $baseURl . $addedURL;
   $curl = curl_init();
 
   switch ($method)
