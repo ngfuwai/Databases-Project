@@ -2,16 +2,9 @@
 	ob_start();
 	session_start();
 
-	$con = mysqli_connect("localhost", "root", "", "Music");
-
-	if(mysqli_connect_errno()) {
-		echo "Failed to connect: " . mysqli_connect_errno();
-	}
 
 	if(isset($_POST['submit'])){
 		$search = $_POST['search'];
-
-
 
 
 		if(isset($_POST['artist'])){
@@ -32,11 +25,6 @@
     			$song_album_id = $row['album_id'];
 
     			echo "<div>" . "Song Id: " .  $song_id . " Date Uploaded: " .  $song_date . " Song Duration: " .  $song_duration .  " Album Id: " .  $song_album_id . " Song name: " .  $name ." </div>";
-
-			// foreach($row as $key => $var)
-			// {
-			//     echo $var . '<br />';
-			// }
 
 
 			}
@@ -105,9 +93,9 @@
 		  <div class="form-group">
 		    <input type="text" name="search" class="form-control" placeholder="Search">
 		  </div>
-		  <input type="radio" name="artist">Artist 
-		  <input type="radio" name="playlist">Playlist
-		  <input type="radio" name="song">Song
+		  <input type="radio" name="search" id="artist">Artist 
+		  <input type="radio" name="search" id="playlist">Playlist
+		  <input type="radio" name="search" id="song">Song
 		  <button type="submit" name="submit" class="btn btn-default">Submit</button>
 		</form>
       
