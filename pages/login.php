@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php 
+session_start();
+include 'callApi.php';
+
+?>
 
 <?php 
 function invalid($entry){
@@ -20,13 +24,17 @@ if(isset($_POST['username']) && isset($_POST['password'])){
   }else if(!ctype_alnum($password)){
     invalid("Password"); //same as previous comment 
   }else{
-    
+    $response = callApi("localhost:8000/api/users/signin", "POST", "{user_id: '', username: $username, password: $password}" );
     //Run validations for a correct username/password
-    $_SESSION['username'] = $username;
-    $_SESSION['password'] = $password;
-    //valid passthrough
-    header("Location: header.php");
-    exit();
+    if ($reponse.user.user_id == '0') {
+      signUp($username, $password);
+    } else {
+      $_SESSION['username'] = $username;
+      $_SESSION['password'] = $password;
+      //valid passthrough
+      header("Location: header.php");
+      exit();
+    }
   }
 }else{
   invalid("empty");
