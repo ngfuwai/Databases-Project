@@ -24,7 +24,8 @@ if(isset($_POST['username']) && isset($_POST['password'])){
   }else if(!ctype_alnum($password)){
     invalid("Password"); //same as previous comment 
   }else{
-    $response = callApi("localhost:8000/api/users/signin", "POST", array("username" => $username, "password" => $password);
+    $response = callApi("api/users/signin", "POST", array("username" => $username, "password" => $password));
+    echo $response;
     //Run validations for a correct username/password
     if ($reponse.user_id == '') {
       signUp($username, $password);

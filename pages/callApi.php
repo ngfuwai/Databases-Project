@@ -1,9 +1,10 @@
 <?php
-function CallAPI($method, $addedURL, $data = false)
+function CallAPI($addedURL, $method, $data = false)
 {
   $baseURL = "http://172.25.99.162:8000/";
-  $url = $baseURl . $addedURL;
+  $url = $baseURL . $addedURL;
   $curl = curl_init();
+  echo $url;
 
   switch ($method)
   {
@@ -11,7 +12,7 @@ function CallAPI($method, $addedURL, $data = false)
       curl_setopt($curl, CURLOPT_POST, 1);
 
       if ($data)
-        curl_setopt($curl CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
       break;
     case "PUT":
       curl_setopt($curl, CURLOPT_PUT, 1);
