@@ -58,8 +58,8 @@ if(isset($_POST['create'])){
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="header.php">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="playlist.php">Playlists</a></li>
+        <li><a href="header.php">Home <span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="playlist.php">Playlists</a></li>
         
       </ul>
       <form method="post" action="header.php" class="navbar-form navbar-left" role="search">
