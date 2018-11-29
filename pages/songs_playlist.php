@@ -38,6 +38,12 @@ else{
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 
+
+<script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "delete.php";
+    };
+</script>
 </head>
 <body>
 
@@ -95,7 +101,7 @@ else{
  $name   = $f[$i]->song_name;
  $address = $f[$i]->artist_name;
  $content = $f[$i]->album_name;
- echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td><td><button>Delete From Playlist</button></td></tr>"  ;
+ echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td><td><button><a href='delete.php?id=". $id . "'>Delete From Playlist</a></button></td></tr>"  ;
  // echo "<th scope='col'>#</th>
  //      <th scope='col'>".$name."</th>
  //      <th scope='col'>".$address."</th>
@@ -201,6 +207,4 @@ else{
 
 </body>
 </html>
-
-
 
