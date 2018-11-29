@@ -114,7 +114,6 @@ session_start();
   $user_id = $_SESSION["user_id"];
 	$response = callApi("api/users/". $user_id ."/playlists" , "GET");
 	$list = json_decode($response);
-	echo $response;
 	$size = count($list);
 	
 	for($i = 0; $i < $size; $i++)
