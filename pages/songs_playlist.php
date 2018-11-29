@@ -140,7 +140,25 @@ if(isset($_POST['create'])){
 
 
 
-<h5>Add Songs to Playlist</h5>
+<h2>Add Songs to Playlist</h2>
+<?php
+  echo "<table class='table table-dark'><th scope='col'>Songs</th>";
+  $search = $_GET['search'];
+  if ($search != '') {
+    $response = callApi('/api/search/songs?search='. $search, 'GET');
+    $data = json_decode($response);
+    for($i=0; $i<$number;$i++){
+      $name   = $data[$i]->song_name;
+      $address = $data[$i]->artist_name;
+      $content = $data[$i]->album_name;
+      $genre = $data[$i]->genre_name;
+      echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td></tr>";
+    } 
+
+  } else {
+
+  }
+?>
 <form method="post">
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Song Id</label>
