@@ -5,7 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
+	"strconv"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -49,6 +52,11 @@ type SongPlaylist struct {
 	Song_playlist_id string `json:"song_playlist_id"`
 }
 
+type SongPlaylistHelp struct {
+	Song_id     string `json:"song_id"`
+	Playlist_id string `json:"playlist_id"`
+}
+
 type User struct {
 	User_id  string `json:"user_id"`
 	Username string `json:"username"`
@@ -90,6 +98,14 @@ type FullAlbum struct {
 	Songs       []FullSong `json:"songs"`
 }
 
+type PlaylistHelp struct {
+	Playlist_name string `json:"playlist_name"`
+}
+
+type SongHelp struct {
+	Song_id string `json:"song_id"`
+}
+
 func getUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
 	params := mux.Vars(r)                              //get params (id in this case)
@@ -104,7 +120,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	var user User
 	err1 := db.QueryRow("SELECT * FROM User WHERE User_id=?", params["id"]).Scan(&user.User_id, &user.Username, &user.Password)
 	if err1 != nil {
-		log.Fatal(err1)
+		//log.Fatal(err1)
 	}
 
 	json.NewEncoder(w).Encode(&user)
@@ -125,22 +141,16 @@ func getPlaylists(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 	fmt.Println("Connected to db")
 
-	var userPlaylists []UserPlaylist
-	rows, err1 := db.Query("SELECT * FROM User_PlayList WHERE User_id=?", params["id"])
+	var playlists []Playlist
+	rows, err1 := db.Query("SELECT * FROM PlayList WHERE User_id=?", params["id"])
 	if err1 != nil {
 		//log.Fatal(err1)
 	}
 
-	var playlists []Playlist
 	i := 0
 	for rows.Next() {
-		userPlaylists = append(userPlaylists, UserPlaylist{})
-		rows.Scan(&userPlaylists[i].Playlist_id, &userPlaylists[i].User_id, &userPlaylists[i].User_playlist_id)
 		playlists = append(playlists, Playlist{})
-		err2 := db.QueryRow("SELECT * FROM Playlist WHERE playlist_id=?", userPlaylists[i].Playlist_id).Scan(&playlists[i].Playlist_id, &playlists[i].Playlist_name, &playlists[i].User_id)
-		if err2 != nil {
-
-		}
+		rows.Scan(&playlists[i].Playlist_id, &playlists[i].Playlist_name, &playlists[i].User_id)
 		i = i + 1
 	}
 	json.NewEncoder(w).Encode(&playlists)
@@ -419,6 +429,157 @@ func getSong(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func searchSongs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	var songs []Song
+	str := "%" + params["search"] + "%"
+	rows, err1 := db.Query("SELECT * FROM Song WHERE song_name LIKE ?", str)
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+
+	i := 0
+	var fullSongs []FullSong
+	for rows.Next() {
+		songs = append(songs, Song{})
+		fullSongs = append(fullSongs, FullSong{})
+		rows.Scan(&songs[i].Song_id, &songs[i].Date, &songs[i].Duration, &songs[i].Song_name, &songs[i].Path, &songs[i].Album_id)
+		var album Album
+		err3 := db.QueryRow("SELECT * FROM Album WHERE album_id=?", songs[i].Album_id).Scan(&album.Album_id, &album.Album_name, &album.Artist_id, &album.Genre_id)
+		if err3 != nil {
+			//log.Fatal(err)
+		}
+		var artist Artist
+		err4 := db.QueryRow("SELECT * FROM Artist WHERE artist_id=?", album.Artist_id).Scan(&artist.Artist_id, &artist.Artist_name)
+		if err4 != nil {
+			//log.Fatal(err)
+		}
+		var genre Genre
+		err5 := db.QueryRow("SELECT * FROM Genre WHERE genre_id=?", album.Genre_id).Scan(&genre.Genre_id, &genre.Genre_name)
+		if err5 != nil {
+			//log.Fatal(err)
+		}
+		fullSongs[i].Album_name = album.Album_name
+		fullSongs[i].Artist_name = artist.Artist_name
+		fullSongs[i].Duration = songs[i].Duration
+		fullSongs[i].Genre_name = genre.Genre_name
+		fullSongs[i].Song_id = songs[i].Song_id
+		fullSongs[i].Song_name = songs[i].Song_name
+		i = i + 1
+	}
+
+	json.NewEncoder(w).Encode(&fullSongs)
+
+}
+
+func searchArtists(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	var artists []Artist
+	str := "%" + params["search"] + "%"
+	rows, err1 := db.Query("SELECT * FROM Artist WHERE artist_name LIKE ?", str)
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+
+	i := 0
+	for rows.Next() {
+		artists = append(artists, Artist{})
+		rows.Scan(&artists[i].Artist_id, &artists[i].Artist_name)
+		i = i + 1
+	}
+
+	json.NewEncoder(w).Encode(&artists)
+}
+
+func searchPlaylists(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	var playlists []Playlist
+	str := "%" + params["search"] + "%"
+	rows, err1 := db.Query("SELECT * FROM Playlist WHERE playlist_name LIKE ?", str)
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+
+	i := 0
+	for rows.Next() {
+		playlists = append(playlists, Playlist{})
+		rows.Scan(&playlists[i].Playlist_id, &playlists[i].Playlist_name, &playlists[i].User_id)
+		i = i + 1
+	}
+
+	json.NewEncoder(w).Encode(&playlists)
+}
+
+func searchAlbums(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	var albums []Album
+	str := "%" + params["search"] + "%"
+	rows, err1 := db.Query("SELECT * FROM Album WHERE album_name LIKE ?", str)
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+
+	var fullAlbums []FullAlbum
+	i := 0
+	for rows.Next() {
+		albums = append(albums, Album{})
+		rows.Scan(&albums[i].Album_id, &albums[i].Album_name, &albums[i].Artist_id, &albums[i].Genre_id)
+		var artist Artist
+		err2 := db.QueryRow("SELECT * FROM Artist WHERE artist_id=?", albums[i].Artist_id).Scan(&artist.Artist_id, &artist.Artist_name)
+		if err2 != nil {
+
+		}
+		var genre Genre
+		err3 := db.QueryRow("SELECT * FROM Genre WHERE genre_id=?", albums[i].Genre_id).Scan(&genre.Genre_id, &genre.Genre_name)
+		if err3 != nil {
+
+		}
+		fullAlbums = append(fullAlbums, FullAlbum{})
+		fullAlbums[i].Album_id = albums[i].Album_id
+		fullAlbums[i].Album_name = albums[i].Album_name
+		fullAlbums[i].Artist_name = artist.Artist_name
+		fullAlbums[i].Genre_name = genre.Genre_name
+		i = i + 1
+	}
+	json.NewEncoder(w).Encode(&fullAlbums)
+}
+
 func getAlbum(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
 	params := mux.Vars(r)                              //get params (id in this case)
@@ -509,7 +670,7 @@ func getAlbumSongs(w http.ResponseWriter, r *http.Request) {
 
 func createUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var user User
+	var user UserSignIn
 	_ = json.NewDecoder(r.Body).Decode(&user)
 
 	//insert query
@@ -520,14 +681,17 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 	fmt.Println("Connected to db")
 
-	insert, err1 := db.Query("INSERT INTO Users (Username, Password) VALUES ('" + user.Username + "', '" + user.Password + "')")
+	//seed := time.Now().UnixNano() / int64(time.Millisecond)
+	id := strconv.Itoa(rand.Intn(100000))
+
+	insert, err1 := db.Query("INSERT INTO User (user_id, username, password) VALUES (?, ?, ?)", id, user.Username, user.Password)
 	if err1 != nil {
 		//log.Fatal(err1)
 	}
 	defer insert.Close()
 
 	var user1 User
-	err2 := db.QueryRow("SELECT * FROM Users WHERE Username=?", user.Username).Scan(&user1.User_id, &user1.Username, &user1.Password)
+	err2 := db.QueryRow("SELECT * FROM User WHERE Username=?", user.Username).Scan(&user1.User_id, &user1.Username, &user1.Password)
 	if err2 != nil {
 		//log.Fatal(err1)
 	}
@@ -549,7 +713,7 @@ func signIn(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Connected to db")
 
 	var user1 User
-	err1 := db.QueryRow("SELECT * FROM Users WHERE Username=? AND Password=?", user.Username, user.Password).Scan(&user1.User_id, &user1.Username, &user1.Password)
+	err1 := db.QueryRow("SELECT * FROM User WHERE username=? AND password=?", user.Username, user.Password).Scan(&user1.User_id, &user1.Username, &user1.Password)
 	if err1 != nil {
 		//log.Fatal(err1)
 	}
@@ -559,7 +723,7 @@ func signIn(w http.ResponseWriter, r *http.Request) {
 
 func insertSong(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var songPlaylist SongPlaylist
+	var songPlaylist SongPlaylistHelp
 	_ = json.NewDecoder(r.Body).Decode(&songPlaylist)
 
 	//insert query
@@ -570,7 +734,10 @@ func insertSong(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 	fmt.Println("Connected to db")
 
-	insert, err1 := db.Query("INSERT INTO Song_Playlist (song_id, playlist_id) VALUES (?, ?)", songPlaylist.Song_id, songPlaylist.Playlist_id)
+	//seed := time.Now().UnixNano() / int64(time.Millisecond)
+	id := strconv.Itoa(rand.Intn(100000))
+
+	insert, err1 := db.Query("INSERT INTO Song_Playlist (song_id, playlist_id, song_playlist_id) VALUES (?, ?, ?)", songPlaylist.Song_id, songPlaylist.Playlist_id, id)
 	if err1 != nil {
 		//log.Fatal(err1)
 	}
@@ -585,7 +752,127 @@ func insertSong(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&songPlaylist1)
 } //put song in playlist
 
+func createPlaylist(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+	var playlist PlaylistHelp
+	_ = json.NewDecoder(r.Body).Decode(&playlist)
+
+	//insert query
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	//seed := time.Now().UnixNano() / int64(time.Millisecond)
+	id := strconv.Itoa(rand.Intn(100000))
+
+	insert, err1 := db.Query("INSERT INTO Playlist (playlist_id, playlist_name, user_id) VALUES (?, ?, ?)", id, playlist.Playlist_name, params["id"])
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+	defer insert.Close()
+
+	var playlist1 Playlist
+	err2 := db.QueryRow("SELECT * FROM Playlist WHERE user_id=? AND playlist_name=?", params["id"], playlist.Playlist_name).Scan(&playlist1.Playlist_id, &playlist1.Playlist_name, &playlist1.User_id)
+	if err2 != nil {
+		//log.Fatal(err1)
+	}
+
+	json.NewEncoder(w).Encode(&playlist1)
+}
+
+func editName(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+	var playlist PlaylistHelp
+	_ = json.NewDecoder(r.Body).Decode(&playlist)
+
+	//insert query
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	insert, err1 := db.Query("UPDATE Playlist SET playlist_name=? WHERE playlist_id=?", playlist.Playlist_name, params["id"])
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+	defer insert.Close()
+
+	var playlist1 Playlist
+	err2 := db.QueryRow("SELECT * FROM Playlist WHERE playlist_id=?", params["id"]).Scan(&playlist1.Playlist_id, &playlist1.Playlist_name, &playlist1.User_id)
+	if err2 != nil {
+		//log.Fatal(err2)
+	}
+
+	json.NewEncoder(w).Encode(&playlist1)
+}
+
+func removePlaylist(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+
+	//insert query
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	del, err1 := db.Query("DELETE FROM Playlist WHERE playlist_id=?", params["id"])
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+	defer del.Close()
+
+	del1, err2 := db.Query("DELETE FROM Song_Playlist WHERE playlist_id=?", params["id"])
+	if err2 != nil {
+		//log.Fatal(err1)
+	}
+	defer del1.Close()
+
+	playlist1 := Playlist{}
+
+	json.NewEncoder(w).Encode(&playlist1)
+}
+
+func removeSong(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+	var song SongHelp
+	_ = json.NewDecoder(r.Body).Decode(&song)
+
+	//insert query
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	insert, err1 := db.Query("DELETE FROM Song_Playlist WHERE playlist_id=? AND song_id=?", params["id"], song.Song_id)
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+	defer insert.Close()
+
+	var playlist1 Playlist
+	err2 := db.QueryRow("SELECT * FROM Playlist WHERE playlist_id=?", params["id"]).Scan(&playlist1.Playlist_id, &playlist1.Playlist_name, &playlist1.User_id)
+	if err2 != nil {
+		//log.Fatal(err2)
+	}
+
+	json.NewEncoder(w).Encode(&playlist1)
+}
+
 func main() {
+	rand.Seed(time.Now().UTC().UnixNano())
 	router := mux.NewRouter()
 	//*******************GET METHODS*********************//
 	router.HandleFunc("/api/users/{id}", getUser).Methods("GET")
@@ -596,12 +883,20 @@ func main() {
 	router.HandleFunc("/api/artists/{id}/albums", getArtistAlbums).Methods("GET")
 	router.HandleFunc("/api/artists/{id}/songs", getArtistSongs).Methods("GET")
 	router.HandleFunc("/api/songs/{id}", getSong).Methods("GET")
+	router.HandleFunc("/api/search/songs/{search}", searchSongs).Methods("GET")
+	router.HandleFunc("/api/search/artists/{search}", searchArtists).Methods("GET")
+	router.HandleFunc("/api/search/playlists/{search}", searchPlaylists).Methods("GET")
+	router.HandleFunc("/api/search/albums/{search}", searchAlbums).Methods("GET")
 	router.HandleFunc("/api/albums/{id}", getAlbum).Methods("GET")
 	router.HandleFunc("/api/albums/{id}/songs", getAlbumSongs).Methods("GET")
+	router.HandleFunc("/api/playlists/{id}/delete", removePlaylist).Methods("GET")
 	//*******************POST METHODS********************//
 	router.HandleFunc("/api/users/signin", signIn).Methods("POST")
 	router.HandleFunc("/api/users", createUser).Methods("POST")
-	router.HandleFunc("/api/playlists/{id}", insertSong).Methods("POST")
+	router.HandleFunc("/api/playlists", insertSong).Methods("POST")
+	router.HandleFunc("/api/users/{id}/playlists", createPlaylist).Methods("POST")
+	router.HandleFunc("/api/playlists/{id}", editName).Methods("POST")
+	router.HandleFunc("/api/playlists/{id}/songs", removeSong).Methods("POST")
 	//*****************DELETE METHODS********************//
 	//*******************PUT METHODS*********************//
 

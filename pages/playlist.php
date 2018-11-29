@@ -39,7 +39,7 @@ include("callApi.php");
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="header.php">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="playlist.php">Playlist</a></li>
+        <li><a href="playlist.php">Playlists</a></li>
         
       </ul>
       <form method="post" action="header.php" class="navbar-form navbar-left" role="search">
@@ -73,8 +73,7 @@ include("callApi.php");
     <tr>
       <th scope="col">#</th>
       <th scope="col">Playlist Name</th>
-      <th scope="col">Artist</th>
-      <th scope="col">Duration</th>
+     
     </tr>
   </thead>
 
@@ -114,13 +113,17 @@ include("callApi.php");
 	$response = callApi("api/users/1/playlists" , "GET");
 	$list = json_decode($response);
 	echo $response;
-	echo '<tr>
-      <th scope="row">1</th>
-      <td>' . $list[0]->playlist_name . "</td>
-      <td>test</td>
-      <td><a href='songs_playlist.php'>View Songs</a></td>
-    </tr>";
+	$size = count($list);
 	
+	for($i = 0; $i < $size; $i++)
+	{	
+	echo '<tr>
+      <th scope="row">'. (string)($i + 1) .'</th>
+      <td>' . $list[$i]->playlist_name . "</td>
+      <td>test</td>
+      <td><a href='songs_playlist.php?playlist_id=" .$list[$i]->playlist_id. "'>View Songs</a></td>
+    </tr> <br>";
+	}
 	
 ?>
 
@@ -131,7 +134,7 @@ include("callApi.php");
 </div>
 
 <h5>Create A Playlist</h5>
-<form method="post">
+<form method="post" action="addPlaylist.php">
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
   <div class="col-10">

@@ -8,9 +8,10 @@ if(isset($_POST['create'])){
 	$user_id = $_POST['user_id'];
 
 	}
-
+else{
 	$user_id = 1;
-	$no = callApi("api/playlists/".$user_id."/songs", "GET");
+	$playlist_id = $playlist_id = $_GET['playlist_id'];
+	$no = callApi("api/playlists/".$playlist_id."/songs", "GET");
 	// $list = json_decode($result);
 	$list2 = json_decode($no);
 	
@@ -19,7 +20,7 @@ if(isset($_POST['create'])){
 	$number = count($f);
 	// $f[1]->song_name;
 
-
+}
 
  ?>
 
@@ -37,6 +38,12 @@ if(isset($_POST['create'])){
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 
+
+<script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "delete.php";
+    };
+</script>
 </head>
 <body>
 
@@ -80,19 +87,21 @@ if(isset($_POST['create'])){
 <div>
 	
 	<h2 style="text-align: center;
-    padding: 30px;">Songs</h2>
+    padding: 30px;">Playlists</h2>
 
 </div>
 
 
 <div style="text-align: center;">
 
-	<?php   echo "<table class='table table-dark'><th scope='col'>".$no->playlist_name."</th>";
+
+	<?php   echo "<table class='table table-dark'><th scope='col'></th>";
  for($i=0; $i<$number;$i++){
+ $id = $f[$i]->song_id;
  $name   = $f[$i]->song_name;
  $address = $f[$i]->artist_name;
  $content = $f[$i]->album_name;
- echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td></tr>";
+ echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td><td><button><a href='delete.php?id=". $id . "'>Delete From Playlist</a></button></td></tr>"  ;
  // echo "<th scope='col'>#</th>
  //      <th scope='col'>".$name."</th>
  //      <th scope='col'>".$address."</th>
@@ -138,7 +147,28 @@ if(isset($_POST['create'])){
 </table> -->
 </div>
 
-
+<h5>Create A Playlist</h5>
+<form method="post">
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" name="playlist_id" id="example-text-input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" name="playlist_name" id="example-text-input">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">User Id</label>
+  <div class="col-10">
+    <input class="form-control" type="text" value="Artisanal kale" name="user_id" id="example-text-input">
+  </div>
+</div>
+<input type="submit" name="create" value="Create">
+</form>
 
 <h2>Add Songs to Playlist</h2>
 <?php
