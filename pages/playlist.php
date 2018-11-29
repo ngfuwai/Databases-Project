@@ -135,24 +135,14 @@ include("callApi.php");
 
 <h5>Create A Playlist</h5>
 <form method="post" action="addPlaylist.php">
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="playlist_id" id="example-text-input">
-  </div>
-</div>
+
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
   <div class="col-10">
     <input class="form-control" type="text" value="Artisanal kale" name="playlist_name" id="example-text-input">
   </div>
 </div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">User Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="user_id" id="example-text-input">
-  </div>
-</div>
+
 <input type="submit" name="create" value="Create">
 </form>
 
