@@ -1,6 +1,4 @@
 <html>
-
-
 <?php
 
 include "callApi.php";

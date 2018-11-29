@@ -2,9 +2,11 @@
 
 include("callApi.php");
 
- ?>
+?>
 
- <!DOCTYPE html>
+ 
+
+<!DOCTYPE html>
 <html>
 <head>
 	<title></title>
@@ -16,8 +18,6 @@ include("callApi.php");
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-
 </head>
 <body>
 
@@ -38,8 +38,8 @@ include("callApi.php");
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="header.php">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="playlist.php">Playlists</a></li>
+        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="playlist.php">Playlist</a></li>
         
       </ul>
       <form method="post" action="header.php" class="navbar-form navbar-left" role="search">
@@ -56,109 +56,14 @@ include("callApi.php");
   </div><!-- /.container-fluid -->
 </nav>
 
+	
 
-<div style="border: black solid 2px; padding: 40px;">
 <div>
-	
-	<h2 style="text-align: center;
-    padding: 30px;">Playlists</h2>
-
+	<h4>Artist Page</h4>
+	<?php  
+	echo callApi("/api/artists/". $_GET['id'] . "/songs");
+	?>
 </div>
-
-
-<div style="text-align: center;">
-	
-	<table class="table table-dark">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Playlist Name</th>
-     
-    </tr>
-  </thead>
-
-  <?php 
-
-
-   ?>
-<!--
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
-</div>
--->
-
-<tbody>
-
-<!--$_SESSION["user_id"]-->
-<?php
-	$response = callApi("api/users/1/playlists" , "GET");
-	$list = json_decode($response);
-	echo $response;
-	$size = count($list);
-	
-	for($i = 0; $i < $size; $i++)
-	{	
-	echo '<tr>
-      <th scope="row">'. (string)($i + 1) .'</th>
-      <td>' . $list[$i]->playlist_name . "</td>
-      <td>test</td>
-      <td><a href='songs_playlist.php?playlist_id=" .$list[$i]->playlist_id. "'>View Songs</a></td>
-      <td><a href='removePlaylis.php?playlist_id=" . $list[$i]->playlist_id . "'>Delete</a></td>
-    </tr> <br>";
-	}
-	
-?>
-
-
-
-</tbody>
-</table>
-</div>
-
-<h5>Create A Playlist</h5>
-<form method="post" action="addPlaylist.php">
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="playlist_id" id="example-text-input">
-  </div>
-</div>
-
-
-<input type="submit" name="create" value="Create">
-</form>
-
-
-
-
-	<div>
-
-		
-
-	</div>
-	
-</div>	
-
 
 </body>
 </html>
-
