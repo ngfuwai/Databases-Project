@@ -1,6 +1,7 @@
 <?php 
 
 include("callApi.php");
+session_start();
 
  ?>
 
@@ -110,7 +111,8 @@ include("callApi.php");
 
 <!--$_SESSION["user_id"]-->
 <?php
-	$response = callApi("api/users/1/playlists" , "GET");
+  $user_id = $_SESSION["user_id"];
+	$response = callApi("api/users/". $user_id ."/playlists" , "GET");
 	$list = json_decode($response);
 	echo $response;
 	$size = count($list);
@@ -136,24 +138,14 @@ include("callApi.php");
 
 <h5>Create A Playlist</h5>
 <form method="post" action="addPlaylist.php">
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="playlist_name" id="example-text-input">
+  <div class="form-group row">
+    <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
+    <div class="col-10">
+      <input class="form-control" type="text" value="Artisanal kale" name="playlist_name" id="example-text-input">
+    </div>
   </div>
-</div>
-<input type="submit" name="create" value="Create">
-</form>
-
-
-
-
-	<div>
-
-		
-
-	</div>
-	
+  <input type="submit" name="create" value="Create">
+  </form>
 </div>	
 
 
