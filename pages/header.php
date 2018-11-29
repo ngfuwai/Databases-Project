@@ -1,57 +1,10 @@
 <?php 
-	ob_start();
-	session_start();
 
+include("callApi.php");
 
-	if(isset($_POST['submit'])){
-		$search = $_POST['search'];
+?>
 
-
-		if(isset($_POST['artist'])){
-			$query = mysqli_query($con, "SELECT * FROM Artist where artist_name='$search'");
-			$row = mysqli_fetch_array($query);
-			while($row) {
-				echo $row['artist_name'];
-			}
-		}
-		if(isset($_POST['song'])){
-			$query = mysqli_query($con, "SELECT * FROM Song where song_name='$search'");
-			while ($row = mysqli_fetch_array($query)) {
-
-    			$name = $row['song_name'];
-    			$song_id = $row['song_id'];
-    			$song_date = $row['date'];
-    			$song_duration = $row['duration'];
-    			$song_album_id = $row['album_id'];
-
-    			echo "<div>" . "Song Id: " .  $song_id . " Date Uploaded: " .  $song_date . " Song Duration: " .  $song_duration .  " Album Id: " .  $song_album_id . " Song name: " .  $name ." </div>";
-
-
-			}
-			
-		}
-		if(isset($_POST['playlist'])){
-			$query = mysqli_query($con, "SELECT * FROM Playlist where playlist_name='$search'");
-			
-			
-    		while ($row = mysqli_fetch_array($query)) {
-
-    			$name = $row['playlist_name'];
-
-    			echo "<div>" . $name ." </div>";
-
-			// foreach($row as $key => $var)
-			// {
-			//     echo $var . '<br />';
-			// }
-
-
-			}
-}
-		
-	}
-
- ?>
+ 
 
 <!DOCTYPE html>
 <html>
@@ -86,35 +39,101 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="playlist.php">Playlists</a></li>
+        <li><a href="playlist.php">Playlist</a></li>
         
       </ul>
       <form method="post" action="header.php" class="navbar-form navbar-left" role="search">
 		  <div class="form-group">
 		    <input type="text" name="search" class="form-control" placeholder="Search">
 		  </div>
-		  <input type="radio" name="search" id="artist">Artist 
-		  <input type="radio" name="search" id="playlist">Playlist
-		  <input type="radio" name="search" id="song">Song
+		  <input type="radio" name="artist">Artist 
+		  <input type="radio" name="playlist">Playlist
+		  <input type="radio" name="song">Song
 		  <button type="submit" name="submit" class="btn btn-default">Submit</button>
 		</form>
       
     </div><!-- /.navbar-collapse -->
-    <br><br>
-
-    <a type="button" class="btn btn-success" name="add-song" href="songManip.php?add=true">Add Song</a>
-    <a type="button" class="btn btn-success" name="delete-song" href="songManip.php?delete=true">Delete Song</a>
-    <a type="button" class="btn btn-success" name="add-song" href="songManip.php?edit=true">Edit Song</a>
   </div><!-- /.container-fluid -->
-
-
 </nav>
 
 	
 
 <div>
 	
-	
+	<?php 
+
+	if(isset($_POST['submit'])){
+		$search = $_POST['search'];
+
+
+
+
+		if(isset($_POST['artist'])){
+
+			$query = callApi("api/search/artists/" . $search , "GET");
+			$number = count(json_decode($query));
+			for($i=0; $i< $number; $i++){
+
+			$de = json_decode($query);
+			$name = $de[0]->artist_name;
+			echo $name . "<br>"
+			$only_id = $de[0]->artist_id;
+			$query2 = callApi("api/artists/". $only_id . "/songs", "GET");
+			$de2 = json_decode($query2);
+			echo $de2[$i]->song_name;
+		}
+			// echo $artist_id = $query->artists_id;
+			// echo $song_query = callApi("api/artists/" . $artists_id . "/songs" , "GET");
+			// $query = mysqli_query($con, "SELECT * FROM Artist where artist_name='$search'");
+			// $row = mysqli_fetch_array($query);
+			// while($row) {
+			// 	echo $row['artist_name'];
+			// }
+		}
+		if(isset($_POST['song'])){
+			echo $query = callApi("api/search/songs/" . $search , "GET");
+			// $query = mysqli_query($con, "SELECT * FROM Song where song_name='$search'");
+			// while ($row = mysqli_fetch_array($query)) {
+
+   //  			$name = $row['song_name'];
+   //  			$song_id = $row['song_id'];
+   //  			$song_date = $row['date'];
+   //  			$song_duration = $row['duration'];
+   //  			$song_album_id = $row['album_id'];
+
+   //  			echo "<div>" . "Song Id: " .  $song_id . " Date Uploaded: " .  $song_date . " Song Duration: " .  $song_duration .  " Album Id: " .  $song_album_id . " Song name: " .  $name ." </div>";
+
+			// foreach($row as $key => $var)
+			// {
+			//     echo $var . '<br />';
+			// }
+
+
+			}
+			
+		
+		if(isset($_POST['playlist'])){
+			echo $query = callApi("api/search/playlists/" . $search , "GET");
+			// $query = mysqli_query($con, "SELECT * FROM Playlist where playlist_name='$search'");
+			
+			
+   //  		while ($row = mysqli_fetch_array($query)) {
+
+   //  			$name = $row['playlist_name'];
+
+   //  			echo "<div>" . $name ." </div>";
+
+			// // foreach($row as $key => $var)
+			// // {
+			// //     echo $var . '<br />';
+			// // }
+
+
+			// }
+}
+		
+	} 
+	?>
 
 </div>
 
