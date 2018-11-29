@@ -8,18 +8,18 @@ if(isset($_POST['create'])){
 	$user_id = $_POST['user_id'];
 
 	} else {
-	$user_id = 1;
-	$playlist_id = $_GET['playlist_id'];
-	$no = callApi("api/playlists/".$playlist_id."/songs", "GET");
-	// $list = json_decode($result);
-	$list2 = json_decode($no);
-	
-	// $list->song_id;
-	$f = $list2->songs;
-	$number = count($f);
-	// $f[1]->song_name;
+    $user_id = 1;
+    $playlist_id = $_GET['playlist_id'];
+    $no = callApi("api/playlists/".$playlist_id."/songs", "GET");
+    // $list = json_decode($result);
+    $list2 = json_decode($no);
+    
+    // $list->song_id;
+    $f = $list2->songs;
+    $number = count($f);
+    // $f[1]->song_name;
 
-}
+  }
 
  ?>
 
@@ -147,21 +147,24 @@ if(isset($_POST['create'])){
 <?php
 
 
-  echo "<form method='post' action='songs_playlis.php?playlis_id=" . $playlist_id . "' class='navbar-form navbar-left' role='search'>
+  echo "<form method='POST' action='songs_playlist.php?playlist_id=" . $playlist_id . "' class='navbar-form navbar-left' role='search'>
           <div class='form-group'>
             <input type='text' name='search' class='form-control' placeholder='Search'>
           </div>
-          <button type='search' name='search' class='btn btn-default'>Search</button>
-        </form>"
+          <button type='search' name='submit' class='btn btn-default'>Search</button>
+        </form>";
 
-  echo "<h2>Add Songs to Playlist</h2>"
+  echo "<h2>Add Songs to Playlist</h2>";
 
   echo "<table class='table table-dark'><th scope='col'>Songs</th>";
-  $search = $_GET['search'];
+
+  $search = $_POST['search'];
   if ($search != '') {
-    $response = callApi('/api/search/songs?search='. $search, 'GET');
+    $response = callApi('api/search/songs/'. $search, 'GET');
+    echo $response;
     $data = json_decode($response);
-    for($i=0; $i<$number;$i++){
+    for($i=0; $i<count($data)+1;$i++){
+      echo $i;
       $name   = $data[$i]->song_name;
       $address = $data[$i]->artist_name;
       $content = $data[$i]->album_name;
@@ -178,38 +181,6 @@ if(isset($_POST['create'])){
   echo "</table>";
 
 ?>
-
-<form method="post">
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Song Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Song Playlist Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
-  </div>
-</div>
-<input type="submit" name="add" value="Add">
-</form>
-
-
-
-
-	<div>
-
-		
-
-	</div>
-	
 </div>	
 
 

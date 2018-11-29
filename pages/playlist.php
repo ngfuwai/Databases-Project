@@ -122,7 +122,7 @@ include("callApi.php");
       <td>' . $list[$i]->playlist_name . "</td>
       <td>test</td>
       <td><a href='songs_playlist.php?playlist_id=" .$list[$i]->playlist_id. "'>View Songs</a></td>
-      <td><a href='removePlaylis.php?playlist_id=" . $list[$i]->playlist_id . "'>Delete</a></td>
+      <td><a href='removePlaylist.php?playlist_id=" . $list[$i]->playlist_id . "'>Delete</a></td>
     </tr> <br>";
 	}
 	
@@ -137,13 +137,11 @@ include("callApi.php");
 <h5>Create A Playlist</h5>
 <form method="post" action="addPlaylist.php">
 <div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
+  <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="playlist_id" id="example-text-input">
+    <input class="form-control" type="text" value="Artisanal kale" name="playlist_name" id="example-text-input">
   </div>
 </div>
-
-
 <input type="submit" name="create" value="Create">
 </form>
 
