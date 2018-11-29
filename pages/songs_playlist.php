@@ -94,6 +94,10 @@ else{
 
 <div style="text-align: center;">
 
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
 
 	<?php   echo "<table class='table table-dark'><th scope='col'></th>";
  for($i=0; $i<$number;$i++){
@@ -110,7 +114,6 @@ else{
  echo "</table>";
 
  ?>
-	
 	<!-- <table class="table table-dark">
   <thead>
     <tr>
@@ -149,7 +152,9 @@ else{
 
 
 <h2>Add Songs to Playlist</h2>
+
 <?php
+
   echo "<table class='table table-dark'><th scope='col'>Songs</th>";
   $search = $_GET['search'];
   if ($search != '') {
@@ -166,7 +171,9 @@ else{
   } else {
 
   }
+  
 ?>
+
 <form method="post">
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Song Id</label>
