@@ -122,6 +122,7 @@ include("callApi.php");
       <td>' . $list[$i]->playlist_name . "</td>
       <td>test</td>
       <td><a href='songs_playlist.php?playlist_id=" .$list[$i]->playlist_id. "'>View Songs</a></td>
+      <td><a href='removePlaylis.php?playlist_id=" . $list[$i]->playlist_id . "'>Delete</a></td>
     </tr> <br>";
 	}
 	

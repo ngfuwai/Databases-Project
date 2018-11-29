@@ -7,8 +7,7 @@ if(isset($_POST['create'])){
 	$playlist_name = $_POST['playlist_name'];
 	$user_id = $_POST['user_id'];
 
-	}
-else{
+	} else {
 	$user_id = 1;
 	$playlist_id = $_GET['playlist_id'];
 	$no = callApi("api/playlists/".$playlist_id."/songs", "GET");
@@ -143,31 +142,15 @@ else{
 </table> -->
 </div>
 
-<h5>Create A Playlist</h5>
-<form method="post">
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="playlist_id" id="example-text-input">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="playlist_name" id="example-text-input">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">User Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="user_id" id="example-text-input">
-  </div>
-</div>
-<input type="submit" name="create" value="Create">
-</form>
-
-<h2>Add Songs to Playlist</h2>
 <?php
+  echo "<form method='post' action='songs_playlis.php?playlis_id=" . $playlist_id . "' class='navbar-form navbar-left' role='search'>
+          <div class='form-group'>
+            <input type='text' name='search' class='form-control' placeholder='Search'>
+          </div>
+          <button type='search' name='search' class='btn btn-default'>Search</button>
+        </form>"
+
+  echo "<h2>Add Songs to Playlist</h2>
   echo "<table class='table table-dark'><th scope='col'>Songs</th>";
   $search = $_GET['search'];
   if ($search != '') {
@@ -178,12 +161,15 @@ else{
       $address = $data[$i]->artist_name;
       $content = $data[$i]->album_name;
       $genre = $data[$i]->genre_name;
-      echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td></tr>";
-    } 
+      echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td> .
+            <td> <a href='addSong.php?playlist_id=" . $playlist_id . "&song_id=" . $data[$i]->song_id  . "</a></td> 
+            </tr>";
+    }
 
   } else {
 
   }
+  echo "</table>";
 ?>
 <form method="post">
 <div class="form-group row">
