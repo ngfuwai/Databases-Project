@@ -86,7 +86,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="playlist.php">Playlist</a></li>
+        <li><a href="playlist.php">Playlists</a></li>
         
       </ul>
       <form method="post" action="header.php" class="navbar-form navbar-left" role="search">

@@ -58,7 +58,7 @@ if(isset($_POST['create'])){
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="header.php">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="playlist.php">Playlist</a></li>
+        <li><a href="playlist.php">Playlists</a></li>
         
       </ul>
       <form method="post" action="header.php" class="navbar-form navbar-left" role="search">
@@ -80,7 +80,7 @@ if(isset($_POST['create'])){
 <div>
 	
 	<h2 style="text-align: center;
-    padding: 30px;">Playlists</h2>
+    padding: 30px;">Songs</h2>
 
 </div>
 
@@ -138,28 +138,7 @@ if(isset($_POST['create'])){
 </table> -->
 </div>
 
-<h5>Create A Playlist</h5>
-<form method="post">
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="playlist_id" id="example-text-input">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Name</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="playlist_name" id="example-text-input">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">User Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" name="user_id" id="example-text-input">
-  </div>
-</div>
-<input type="submit" name="create" value="Create">
-</form>
+
 
 <h5>Add Songs to Playlist</h5>
 <form method="post">

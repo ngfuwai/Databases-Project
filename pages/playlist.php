@@ -2,16 +2,6 @@
 
 include("callApi.php");
 
-if(isset($_POST['create'])){
-	$playlist_id = $_POST['playlist_id'];
-	$playlist_name = $_POST['playlist_name'];
-	$user_id = $_POST['user_id'];
-
-	callApi($_POST, "/api/playlist/" . '$playlist_id' ., array("playlist_id"=>'$playlist_id', "playlist_name"=>'$playlist_name', "user_id"=>'$user_id'));
-}
-
-
-
  ?>
 
  <!DOCTYPE html>
@@ -82,7 +72,7 @@ if(isset($_POST['create'])){
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Song Name</th>
+      <th scope="col">Playlist Name</th>
       <th scope="col">Artist</th>
       <th scope="col">Duration</th>
     </tr>
@@ -92,7 +82,7 @@ if(isset($_POST['create'])){
 
 
    ?>
-
+<!--
   <tbody>
     <tr>
       <th scope="row">1</th>
@@ -113,6 +103,30 @@ if(isset($_POST['create'])){
       <td>@twitter</td>
     </tr>
   </tbody>
+</table>
+</div>
+-->
+
+<tbody>
+
+<!--$_SESSION["user_id"]-->
+<?php
+	$response = callApi("api/users/1/playlists" , "GET");
+	$list = json_decode($response);
+	echo $response;
+	echo '<tr>
+      <th scope="row">1</th>
+      <td>' . $list[0]->playlist_name . "</td>
+      <td>test</td>
+      <td><a href='songs_playlist.php'>View Songs</a></td>
+    </tr>";
+	
+	
+?>
+
+
+
+</tbody>
 </table>
 </div>
 
@@ -137,29 +151,6 @@ if(isset($_POST['create'])){
   </div>
 </div>
 <input type="submit" name="create" value="Create">
-</form>
-
-<h5>Add Songs to Playlist</h5>
-<form method="post">
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Song Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Playlist Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Song Playlist Id</label>
-  <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
-  </div>
-</div>
-<input type="submit" name="add" value="Add">
 </form>
 
 
