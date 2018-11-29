@@ -160,6 +160,7 @@ if(isset($_POST['create'])){
 
   $search = $_POST['search'];
   if ($search != '') {
+    $search = str_replace(' ', "%20", $search);
     $response = callApi('api/search/songs/'. $search, 'GET');
     $data = json_decode($response);
     for($i=0; $i<count($data);$i++){
