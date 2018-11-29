@@ -102,6 +102,10 @@ type PlaylistHelp struct {
 	Playlist_name string `json:"playlist_name"`
 }
 
+type SongHelp struct {
+	Song_id string `json:"song_id"`
+}
+
 func getUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
 	params := mux.Vars(r)                              //get params (id in this case)
@@ -809,6 +813,64 @@ func editName(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&playlist1)
 }
 
+func removePlaylist(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+
+	//insert query
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	del, err1 := db.Query("DELETE FROM Playlist WHERE playlist_id=?", params["id"])
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+	defer del.Close()
+
+	del1, err2 := db.Query("DELETE FROM Song_Playlist WHERE playlist_id=?", params["id"])
+	if err2 != nil {
+		//log.Fatal(err1)
+	}
+	defer del1.Close()
+
+	playlist1 := Playlist{}
+
+	json.NewEncoder(w).Encode(&playlist1)
+}
+
+func removeSong(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json") //serves response as json instead of text
+	params := mux.Vars(r)                              //get params (id in this case)
+	var song SongHelp
+	_ = json.NewDecoder(r.Body).Decode(&song)
+
+	//insert query
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/db_project") //mysql, Username:Password@tcp(localhostip:3306)/db
+	if err != nil {
+		//log.Fatal(err)
+	}
+	defer db.Close()
+	fmt.Println("Connected to db")
+
+	insert, err1 := db.Query("DELETE FROM Song_Playlist WHERE playlist_id=? AND song_id=?", params["id"], song.Song_id)
+	if err1 != nil {
+		//log.Fatal(err1)
+	}
+	defer insert.Close()
+
+	var playlist1 Playlist
+	err2 := db.QueryRow("SELECT * FROM Playlist WHERE playlist_id=?", params["id"]).Scan(&playlist1.Playlist_id, &playlist1.Playlist_name, &playlist1.User_id)
+	if err2 != nil {
+		//log.Fatal(err2)
+	}
+
+	json.NewEncoder(w).Encode(&playlist1)
+}
+
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	router := mux.NewRouter()
@@ -827,12 +889,14 @@ func main() {
 	router.HandleFunc("/api/search/albums/{search}", searchAlbums).Methods("GET")
 	router.HandleFunc("/api/albums/{id}", getAlbum).Methods("GET")
 	router.HandleFunc("/api/albums/{id}/songs", getAlbumSongs).Methods("GET")
+	router.HandleFunc("/api/playlists/{id}/delete", removePlaylist).Methods("GET")
 	//*******************POST METHODS********************//
 	router.HandleFunc("/api/users/signin", signIn).Methods("POST")
 	router.HandleFunc("/api/users", createUser).Methods("POST")
 	router.HandleFunc("/api/playlists", insertSong).Methods("POST")
 	router.HandleFunc("/api/users/{id}/playlists", createPlaylist).Methods("POST")
 	router.HandleFunc("/api/playlists/{id}", editName).Methods("POST")
+	router.HandleFunc("/api/playlists/{id}/songs", removeSong).Methods("POST")
 	//*****************DELETE METHODS********************//
 	//*******************PUT METHODS*********************//
 
