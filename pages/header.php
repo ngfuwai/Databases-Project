@@ -38,7 +38,7 @@ include("callApi.php");
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="header.php">Home <span class="sr-only">(current)</span></a></li>
         <li><a href="playlist.php">Playlist</a></li>
         
       </ul>
@@ -69,27 +69,53 @@ include("callApi.php");
 
 
 		if(isset($_POST['artist'])){
-
+			// $new_search = str_replace(' ', '%20', $search);
 			$query = callApi("api/search/artists/" . $search , "GET");
-			$number = count(json_decode($query));
-			for($i=0; $i< $number; $i++){
+		// 	$number = count(json_decode($query));
+		// 	for($i=0; $i< $number; $i++){
 
-			$de = json_decode($query);
-			$name = $de[0]->artist_name;
+		// 	$de = json_decode($query);
+		// 	$name = $de[0]->artist_name;
 			
-			$only_id = $de[0]->artist_id;
-			echo $name . "<br>" . $only_id . "<a href='artists.php?id=" .$only_id.  "'>" . $name .  "</a>";
-			// $query2 = callApi("api/artists/". $only_id . "/songs", "GET");
-			// $de2 = json_decode($query2);
-			// echo $de2[$i]->song_name;
-		}
+		// 	$only_id = $de[0]->artist_id;
+		// 	echo $name . "<br>" . $only_id . "<a href='artists.php?id=" .$only_id.  "'>" . $name .  "</a>";
+		// 	// $query2 = callApi("api/artists/". $only_id . "/songs", "GET");
+		// 	// $de2 = json_decode($query2);
+		// 	// echo $de2[$i]->song_name;
+		// }
 			// echo $artist_id = $query->artists_id;
 			// echo $song_query = callApi("api/artists/" . $artists_id . "/songs" , "GET");
+
+
+		
+			// $query = mysqli_query($con, "SELECT * FROM Artist where artist_name='$search'");
+			// $row = mysqli_fetch_array($query);
+			// $number = count($row);
+			while($row = mysqli_fetch_array($query)) {
+				$artist_id = $row['artist_id'];
+				echo "<h5 style=''>" . $row['artist_name'] . "</h5>";
+
+				$query2 = mysqli_query($con, "SELECT * from Song where album_id=(select album_id from Album where artist_id='$artist_id');");
+				while ($row2 = mysqli_fetch_array($query2)) {
+					echo "<p>" . $row2['song_name'] . "</p><br>";
+				}
+			}
 			
 		}
 		if(isset($_POST['song'])){
 			echo $query = callApi("api/search/songs/" . $search , "GET");
-			$json = json_decode($query);
+
+			while ($row = mysqli_fetch_array($query)) {
+    			$name = $row['song_name'];
+    			$song_id = $row['song_id'];
+    			$song_date = $row['date'];
+    			$song_duration = $row['duration'];
+    			$song_album_id = $row['album_id'];
+    			echo "<div>" . "Song Id: " .  $song_id . " Date Uploaded: " .  $song_date . " Song Duration: " .  $song_duration .  " Album Id: " .  $song_album_id . " Song name: " .  $name ." </div>";
+			}
+
+			
+			// $json = json_decode($query);
 
 			// foreach ($json['items'] as $address)
 			// 	{
@@ -100,12 +126,32 @@ include("callApi.php");
 			
 		
 		if(isset($_POST['playlist'])){
-			echo $query = callApi("api/search/playlists/" . $search , "GET");
-			$playlist_row = json_decode($query);
-			$playlist_row_name = $playlist_row[0]->playlist_name;
+			$query = callApi("api/search/playlists/" . $search , "GET");
+
+			while ($row = mysqli_fetch_array($query)) {
+    			$name = $row['playlist_name'];
+    			echo "<h5 style=''>" . $name . "</h5>";
+    			$playlist_id = $row['playlist_id'];
+    			$query2 = mysqli_query($con, "SELECT * FROM Song_Playlist where playlist_id='$playlist_id'");
+    			while ($row2 = mysqli_fetch_array($query2)) {
+    				$song_id =  $row2['song_id'];
+    				$query3 = mysqli_query($con, "SELECT * FROM Song where song_id='$song_id'");
+    				while ($row3 = mysqli_fetch_array($query3)) {
+    					echo "<p>" . $row3['song_name'] . "</p><br>";
+    				}
+    			}
+			// foreach($row as $key => $var)
+			// {
+			//     echo $var . '<br />';
+			// }
+			}
+
+
+			// $playlist_row = json_decode($query);
+			// $playlist_row_name = $playlist_row[0]->playlist_name;
 			
-			$playlist_row_id = $playlist_row[0]->playlist_id;
-			echo $playlist_row_name . "<br>" . $playlist_row_id . "<a href='playlist.php?id=" .$playlist_row_id.  "'>" . $playlist_row_name .  "</a>";
+			// $playlist_row_id = $playlist_row[0]->playlist_id;
+			// echo $playlist_row_name . "<br>" . $playlist_row_id . "<a href='playlist.php?id=" .$playlist_row_id.  "'>" . $playlist_row_name .  "</a>";
 			
 }
 		
