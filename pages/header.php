@@ -76,11 +76,12 @@ include("callApi.php");
 
 			$de = json_decode($query);
 			$name = $de[0]->artist_name;
-			echo $name . "<br>";
+			
 			$only_id = $de[0]->artist_id;
-			$query2 = callApi("api/artists/". $only_id . "/songs", "GET");
-			$de2 = json_decode($query2);
-			echo $de2[$i]->song_name;
+			echo $name . "<br>" . $only_id . "<a href='artists.php?id=" .$only_id.  "'>" . $name .  "</a>";
+			// $query2 = callApi("api/artists/". $only_id . "/songs", "GET");
+			// $de2 = json_decode($query2);
+			// echo $de2[$i]->song_name;
 		}
 			// echo $artist_id = $query->artists_id;
 			// echo $song_query = callApi("api/artists/" . $artists_id . "/songs" , "GET");
@@ -90,16 +91,21 @@ include("callApi.php");
 			echo $query = callApi("api/search/songs/" . $search , "GET");
 			$json = json_decode($query);
 
-			foreach ($json['items'] as $address)
-				{
-				    echo "items:". $address['address'] ."\n";
-				};
+			// foreach ($json['items'] as $address)
+			// 	{
+			// 	    echo "items:". $address['address'] ."\n";
+			// 	};
 
 			}
 			
 		
 		if(isset($_POST['playlist'])){
 			echo $query = callApi("api/search/playlists/" . $search , "GET");
+			$playlist_row = json_decode($query);
+			$playlist_row_name = $playlist_row[0]->playlist_name;
+			
+			$playlist_row_id = $playlist_row[0]->playlist_id;
+			echo $playlist_row_name . "<br>" . $playlist_row_id . "<a href='playlist.php?id=" .$playlist_row_id.  "'>" . $playlist_row_name .  "</a>";
 			
 }
 		
