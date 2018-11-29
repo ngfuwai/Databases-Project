@@ -1,5 +1,4 @@
 <html>
-<<<<<<< Updated upstream
 
 
 <?php
@@ -18,10 +17,8 @@ header("Location: playlist.php");
 
 	  
 ?>
-=======
+
 <body>
 
->>>>>>> Stashed changes
-</body>
 
 </html>

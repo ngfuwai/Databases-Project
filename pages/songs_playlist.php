@@ -94,11 +94,6 @@ else{
 
 <div style="text-align: center;">
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
-
 	<?php   echo "<table class='table table-dark'><th scope='col'></th>";
  for($i=0; $i<$number;$i++){
  $id = $f[$i]->song_id;
