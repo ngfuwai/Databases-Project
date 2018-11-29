@@ -76,7 +76,7 @@ include("callApi.php");
 
 			$de = json_decode($query);
 			$name = $de[0]->artist_name;
-			echo $name . "<br>"
+			echo $name . "<br>";
 			$only_id = $de[0]->artist_id;
 			$query2 = callApi("api/artists/". $only_id . "/songs", "GET");
 			$de2 = json_decode($query2);
@@ -84,52 +84,23 @@ include("callApi.php");
 		}
 			// echo $artist_id = $query->artists_id;
 			// echo $song_query = callApi("api/artists/" . $artists_id . "/songs" , "GET");
-			// $query = mysqli_query($con, "SELECT * FROM Artist where artist_name='$search'");
-			// $row = mysqli_fetch_array($query);
-			// while($row) {
-			// 	echo $row['artist_name'];
-			// }
+			
 		}
 		if(isset($_POST['song'])){
 			echo $query = callApi("api/search/songs/" . $search , "GET");
-			// $query = mysqli_query($con, "SELECT * FROM Song where song_name='$search'");
-			// while ($row = mysqli_fetch_array($query)) {
+			$json = json_decode($query);
 
-   //  			$name = $row['song_name'];
-   //  			$song_id = $row['song_id'];
-   //  			$song_date = $row['date'];
-   //  			$song_duration = $row['duration'];
-   //  			$song_album_id = $row['album_id'];
-
-   //  			echo "<div>" . "Song Id: " .  $song_id . " Date Uploaded: " .  $song_date . " Song Duration: " .  $song_duration .  " Album Id: " .  $song_album_id . " Song name: " .  $name ." </div>";
-
-			// foreach($row as $key => $var)
-			// {
-			//     echo $var . '<br />';
-			// }
-
+			foreach ($json['items'] as $address)
+				{
+				    echo "items:". $address['address'] ."\n";
+				};
 
 			}
 			
 		
 		if(isset($_POST['playlist'])){
 			echo $query = callApi("api/search/playlists/" . $search , "GET");
-			// $query = mysqli_query($con, "SELECT * FROM Playlist where playlist_name='$search'");
 			
-			
-   //  		while ($row = mysqli_fetch_array($query)) {
-
-   //  			$name = $row['playlist_name'];
-
-   //  			echo "<div>" . $name ." </div>";
-
-			// // foreach($row as $key => $var)
-			// // {
-			// //     echo $var . '<br />';
-			// // }
-
-
-			// }
 }
 		
 	} 
