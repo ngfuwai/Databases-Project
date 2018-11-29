@@ -83,12 +83,14 @@ include("callApi.php");
 				$number2 = count(json_decode($query2));
 				for($i=0; $i< $number2; $i++){
 					$de2 = json_decode($query2);
-					$name = $de2[0]->song_name;
-					$song_duration = $de2[0]->duration;
+					$name = $de2[$i]->song_name;
+					$song_duration = $de2[$i]->duration;
+					$album_name = $de2[$i]->album_name;
 				
 
 					echo "<h5>Song Name: " . $name . "</h5><br>";
 					echo "<p>Song Duration: " . $song_duration . "</p><br><br>";
+					echo "<p>Album: " . $album_name . "</p><br>";
 				
 				}
 			}
