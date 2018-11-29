@@ -8,9 +8,10 @@ if(isset($_POST['create'])){
 	$user_id = $_POST['user_id'];
 
 	}
-
+else{
 	$user_id = 1;
-	$no = callApi("api/playlists/".$user_id."/songs", "GET");
+	$playlist_id = $playlist_id = $_GET['playlist_id'];
+	$no = callApi("api/playlists/".$playlist_id."/songs", "GET");
 	// $list = json_decode($result);
 	$list2 = json_decode($no);
 	
@@ -19,7 +20,7 @@ if(isset($_POST['create'])){
 	$number = count($f);
 	// $f[1]->song_name;
 
-
+}
 
  ?>
 
@@ -58,7 +59,7 @@ if(isset($_POST['create'])){
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="header.php">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="playlist.php">Playlist</a></li>
+        <li><a href="playlist.php">Playlists</a></li>
         
       </ul>
       <form method="post" action="header.php" class="navbar-form navbar-left" role="search">
@@ -87,7 +88,8 @@ if(isset($_POST['create'])){
 
 <div style="text-align: center;">
 
-	<?php   echo "<table class='table table-dark'><th scope='col'>"."</th>";
+
+	<?php   echo "<table class='table table-dark'><th scope='col'></th>";
  for($i=0; $i<$number;$i++){
  $id = $f[$i]->song_id;
  $name   = $f[$i]->song_name;
