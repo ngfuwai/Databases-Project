@@ -161,17 +161,14 @@ if(isset($_POST['create'])){
   $search = $_POST['search'];
   if ($search != '') {
     $response = callApi('api/search/songs/'. $search, 'GET');
-    echo $response;
     $data = json_decode($response);
-    for($i=0; $i<count($data)+1;$i++){
-      echo $i;
+    for($i=0; $i<count($data);$i++){
       $name   = $data[$i]->song_name;
       $address = $data[$i]->artist_name;
       $content = $data[$i]->album_name;
       $genre = $data[$i]->genre_name;
-      echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td> .
-            <td> <a href='addSong.php?playlist_id=" . $playlist_id . "&song_id=" . $data[$i]->song_id  . "</a></td> 
-            </tr>";
+      echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td><td>".$genre."</td>";
+      echo "<td><button class='btn btn-success'><a href='addSong.php?playlist_id=" . $playlist_id . "&song_id=" . $data[$i]->song_id  . "'>Add Song</a></button></td> </tr>";
     }
 
   } else {
