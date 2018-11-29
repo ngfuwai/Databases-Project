@@ -10,7 +10,7 @@ if(isset($_POST['create'])){
 	}
 else{
 	$user_id = 1;
-	$playlist_id = $playlist_id = $_GET['playlist_id'];
+	$playlist_id = $_GET['playlist_id'];
 	$no = callApi("api/playlists/".$playlist_id."/songs", "GET");
 	// $list = json_decode($result);
 	$list2 = json_decode($no);
@@ -39,11 +39,6 @@ else{
 
 
 
-<script type="text/javascript">
-    document.getElementById("myButton").onclick = function () {
-        location.href = "delete.php";
-    };
-</script>
 </head>
 <body>
 
@@ -101,7 +96,8 @@ else{
  $name   = $f[$i]->song_name;
  $address = $f[$i]->artist_name;
  $content = $f[$i]->album_name;
- echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td><td><button><a href='delete.php?id=". $id . "'>Delete From Playlist</a></button></td></tr>"  ;
+ $deleteString = "Delete From Playlist";
+ echo "<tr><td>".$name."</td><td>".$address."</td><td>".$content."</td><td><button><a href='deleteSong.php?song_id=". $id . "&playlist_id=" . $playlist_id . "'>" . $deleteString ."</a></button></td></tr>";
  // echo "<th scope='col'>#</th>
  //      <th scope='col'>".$name."</th>
  //      <th scope='col'>".$address."</th>
