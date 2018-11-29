@@ -122,6 +122,7 @@ session_start();
       <th scope="row">'. (string)($i + 1) .'</th>
       <td>' . $list[$i]->playlist_name . "</td>
       <td>test</td>
+      <td><a href='editPlaylistName.php?playlist_id=".$list[$i]->playlist_id."'>Change playlist Name</a></td>
       <td><a href='songs_playlist.php?playlist_id=" .$list[$i]->playlist_id. "'>View Songs</a></td>
       <td><a href='removePlaylist.php?playlist_id=" . $list[$i]->playlist_id . "'>Delete</a></td>
     </tr> <br>";

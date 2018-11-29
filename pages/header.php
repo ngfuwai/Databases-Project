@@ -44,11 +44,11 @@ include("callApi.php");
       </ul>
       <form method="post" action="header.php" class="navbar-form navbar-left" role="search">
 		  <div class="form-group">
-		    <input type="text" name="search" class="form-control" placeholder="Search">
+		    <input type="text" name="search" class="form-control" placeholder="Search"/>
 		  </div>
-		  <input type="radio" name="artist">Artist 
+		  <input type="radio" name="artist">Artist</input>
 		 
-		  <input type="radio" name="song">Song
+		  <input type="radio" name="song">Song</input>
 		  <button type="submit" name="submit" class="btn btn-default">Submit</button>
 		</form>
       
@@ -65,11 +65,8 @@ include("callApi.php");
 	if(isset($_POST['submit'])){
 		$search = $_POST['search'];
 
-
-
-
 		if(isset($_POST['artist'])){
-			// $new_search = str_replace(' ', '%20', $search);
+      $search = str_replace(' ', '%20', $search);
 			$query = callApi("api/search/artists/" . $search , "GET");
 			
 			$number = count(json_decode($query));

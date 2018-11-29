@@ -180,8 +180,6 @@ if(isset($_POST['create'])){
 
 ?>
 </div>	
-
-
 </body>
 </html>
 
