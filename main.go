@@ -142,7 +142,7 @@ func getPlaylists(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Connected to db")
 
 	var playlists []Playlist
-	rows, err1 := db.Query("SELECT * FROM PlayList WHERE User_id=?", params["id"])
+	rows, err1 := db.Query("SELECT * FROM PlayList WHERE User_id=? ORDER BY playlist_name", params["id"])
 	if err1 != nil {
 		//log.Fatal(err1)
 	}
@@ -856,7 +856,7 @@ func removeSong(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 	fmt.Println("Connected to db")
 
-	insert, err1 := db.Query("DELETE FROM Song_Playlist WHERE playlist_id=? AND song_id=?", params["id"], song.Song_id)
+	insert, err1 := db.Query("DELETE FROM Song_Playlist WHERE playlist_id=? AND song_id=? LIMIT 1", params["id"], song.Song_id)
 	if err1 != nil {
 		//log.Fatal(err1)
 	}
